@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>About Last Night...</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+	<h1> About Last Night... </h1>
+  <br>
+  <br>
+  <div class="eventful-badge eventful-medium">
+  <img src="http://api.eventful.com/images/powered/eventful_88x31.gif"
+    alt="Local Events, Concerts, Tickets">
+  <p><a href="http://eventful.com/">Events</a> by Eventful</p>
+</div>
+  <div> </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
+  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+<script>
+  //firebase
+    var config = {
+      apiKey: "AIzaSyCJex1acwpZx-jydhhdr0UAkFWqK0uT_v0",
+      authDomain: "project1-9ab9c.firebaseapp.com",
+      databaseURL: "https://project1-9ab9c.firebaseio.com",
+      projectId: "project1-9ab9c",
+      storageBucket: "project1-9ab9c.appspot.com",
+      messagingSenderId: "522865655856"
+  
+}
+// api for hotels
+ 
+
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+    var ref = firebase.database().ref();
+    ref.on('child_added', function(childSnapshot, prevChildKey) {
+      console.log(childSnapshot);
+});
+    console.log(ref);
+    /*if (location){
+      
+      
+    }*/
+    var city="phoenix";
+    var state="arizona";
+
+   var weatherURL = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22" + city + "%2C%20" + state + "%22)&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+
+     $.ajax({
+     	url: weatherURL,
+     	method: "GET"	
+     }).done (function(results){
+    	console.log("it worked");
+       console.log(results);
+       console.log(results.query.results.channel.item.condition.temp);
+
+    });	
+
+    /* var apikeyh = "n8g8ckeyquhmd6j5trnnvgcn";
+    var hotelsURL = "http://api.hotwire.com/v1/deal/hotel?dest=" + city + "&apikey="+ apikeyh + "&limit=1";
+    $.ajax({
+      url: hotelsURL,
+      method: "GET"
+    }).done (function(results){
+      console.log("working");
+      console.log(results);
+    });*/
+   // var apikeye = "2DvXq6pGcC472L2b";
+
+
+     
+
+
+	</script>
+</body>
+</html>
