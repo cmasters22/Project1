@@ -35,14 +35,12 @@ $(document).ready(function() {
           location: location
         });
         
-
-        //displaySearches(search);
         console.log("right below");
         //console.log(snapshot().val().location);
         getWeather(search);
         $("#cityLabel").html(search);
-        //getHotels();
-        //getEventful();
+        getHotels();
+        getEventful();
 });
 
       $(document).on("click", ".searchButton", function(event){
@@ -50,8 +48,8 @@ $(document).ready(function() {
           getWeather(l);
            
            $("#cityLabel").html(l);
-              //getHotels();
-             //getEventful();
+              getHotels();
+             getEventful();
       });
 
        database.ref().on("child_added", function(childSnapshot){
@@ -59,21 +57,6 @@ $(document).ready(function() {
             displaySearch(loc);
          });
 
-
-
- // function initializeFirebase(){
-    
-    //});
-
-      //database.ref().on("child_added", function(childSnapshot){
-
-        /*$("#inputSearch").html(childSnapshot.val().location);
-      //});
-      console.log("cheese");
-      console.log(childSnapshot.val().location);
-
-
-  }*/
 
    function displaySearch(loc){
 
@@ -104,7 +87,7 @@ $(document).ready(function() {
       //$("#imgEx").attr("src" , uri);
       var yahooPic = results.query.results.channel.image.url;
       //$("imgEx").attr("src", yahooPic);
-      $("#imgEx").attr("src", yahooPic);
+      //$("#imgEx").attr("src", yahooPic);
 
      var currentTemp = results.query.results.channel.item.condition.temp;
 
@@ -112,27 +95,39 @@ $(document).ready(function() {
     });
   }
 });
-  //function getHotels (search){
-    //var apikeyh = "n8g8ckeyquhmd6j5trnnvgcn";
-    //var hotelsURL = "http://api.hotwire.com/v1/deal/hotel?dest=" + search + "&apikey="+ apikeyh + "&limit=1&format=jsonp";
-    // $.ajax({
-    //   url: hotelsURL,
-    //   method: "GET"
-    // }).done (function(results){
-    //   console.log("working");
-    //   console.log(results);
-    // });
-/*
+
+function getHotels (search){
+    var apikeyh = "n8g8ckeyquhmd6j5trnnvgcn";
+    var hotelsURL = "http://api.hotwire.com/v1/deal/hotel?dest=" + search + "&distance=*~30&apikey="+ apikeyh + "&limit=5&format=jsonp";
+    console.log(hotelsURL)
+
     $.ajax({
-    url: hotelsURL,
-    method: 'GET',
-    crossDomain: true,
-    dataType: 'jsonp',
-    jsonpCallback:'test',
-    success: function(res) {console.log('new',res);},
-    error: function(error) {console.log('error');},
-    beforeSend: setHeader
-});
+       url: hotelsURL,
+       method: "GET",
+       crossDomain: true,
+       dataType: 'jsonp',
+     }).done (function(results){
+       console.log("working");
+       console.log(results.Result[0]);
+       console.log(results.Result[1]);
+       console.log(results.Result[2]);
+
+      $("#description").html(results.Result[0].Headline);
+       $("#description2").html(results.Result[1].Headline);
+       $("#description3").html(results.Result[2].Headline);
+
+      // $("#hotelLink").html(results.Result[0].Url);
+
+      var tLink = results.Result[0].Url;
+       var tlink2 = results.Result[1].Url;
+       var tlink3 = results.Result[0].Url;
+
+  $("#hotelLink").attr("href", tLink);
+   $("#hotelLink2").attr("href", tLink2);
+   $("#hotelLink3").attr("href", tLink3);
+
+    });
+
     function test(r){
       console.log(r);
     }
@@ -141,59 +136,46 @@ function setHeader(xhr) {
     xhr.setRequestHeader('Authorization', apikeyh);
     xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
     xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
-}*/
+}
+}
 
 
-//////////////////////////////////////////////////////
-  // HTML: <a href=" " id="linkURL"> www.Hotwire.com </a> 
-  // HTML: <a href=" " id="linkURL2"> www.Hotwire.com </a>
-  //HTML: <a href=" " id="linkURL3"> www.Hotwire.com </a>
-  // inputting the API link - using for Hotwire
- /*var tLink = ;
- var tlink2 = ;
- var tlink3 = ;*/
- //
-   /*$("#linkURL").attr("href", tLink);
-   $("#linkURL2").attr("href", tLink2);
-   $("#linkURL3").attr("href", tLink3);*/
-
-//} 
-//function getEventful(){  
-   /*var eventfulURL = "http://api.eventful.com/json/events/search/rss?...&location=" + search +"&app_key=2DvXq6pGcC472L2b&sort_order=popularity";
+function getEventful(search){
+var eventfulURL = "http://api.eventful.com/json/events/search/rss?...&location=" + search +"&app_key=2DvXq6pGcC472L2b&sort_order=popularity";
         $.ajax({
       url: eventfulURL,
-      method: "GET",
+      method: 'GET',
       crossDomain: true,
-      dataType: 'jsonp',
-      jsonpCallback: 'test',
-      success: function(resp) {
-      console.log('new',resp);
+      dataType: "jsonp",
+      jsonpCallback: "test",
+      }).done (function(results){
+       console.log("working123");
+       console.log(results.events.event[0]);
+       // console.log(results.events.event[0].title);
+       $("#eventTitle").html(results.events.event[0].title);
+       $("#eventTitle2").html(results.events.event[1].title);
+       $("#eventTitle3").html(results.events.event[2].title);
 
-     },
-      error: function(errorp){
-      console.log(errorp);
-    
-      },
+      $("#venue").html(results.events.event[0].venue_name);
+       $("#venue2").html(results.events.event[1].venue_name);
+       $("#venue3").html(results.events.event[2].venue_name);
 
-     beforeSend: setHeader
-      });
+      $("#eventPic").html(results.events.event[0].image.url);
+       $("#eventPic2").html(results.events.event[1].image.url);
+       $("#eventPic3").html(results.events.event[2].image.url);
 
-  function test(r) {
+
+    });
+
+function test(r) {
     console.log(r);
     }
 
-   function setHeader(xhr) {
-    xhr.setRequestHeader(‘Access-Control-Allow-Origin’, ‘*’);
-    xhr.setRequestHeader(‘Access-Control-Allow-Methods’, ‘GET’);
-    }*/
-
-    /////////////////////////////////////////////////////////
-    // var eventPic = input the api results.blah.blah.url
-    //  $("#imgEx").attr("src", eventPic);
-    //////////////////////////////////////////
-
-      
-     
+ function setHeader(xhr) {
+    xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+    xhr.setRequestHeader("Access-Control-Allow-Methods", "GET");
+    }
+}
 
 
 
